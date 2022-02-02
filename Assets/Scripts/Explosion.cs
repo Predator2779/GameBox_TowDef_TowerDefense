@@ -6,7 +6,7 @@ public class Explosion : MonoBehaviour
 {
     [SerializeField] private HitPoints _hp;
     [SerializeField] private float _forceExplosion = 10.0f;
-    [SerializeField] private float _rocketSpeed = 1.0f;
+    [SerializeField] private float _rocketSpeed = 0.6f;
     [SerializeField] private float _damage = 45.0f;
     [SerializeField] private bool _isDamaged = false;
     [SerializeField] private bool _fire = false;
@@ -32,6 +32,12 @@ public class Explosion : MonoBehaviour
             objectsInCol.Add(body);
 
         _fire = true;
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag == "Ground")
+            Destroy(gameObject);
     }
 
     /// <summary>
