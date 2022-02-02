@@ -35,6 +35,8 @@ public class TurretShooting : MonoBehaviour
     private void FixedUpdate()
     {
         OnceShoot();
+
+        Debug.Log(_enemy);
     }
     
     /// <summary>
@@ -62,7 +64,9 @@ public class TurretShooting : MonoBehaviour
             gameObject.transform.parent.LookAt(_enemy.transform.position, transform.position);
             _headTurret.transform.LookAt(_enemy.transform.position, transform.position);
             _timing = true;
-        }       
+        }
+        else
+            _timing = false;
     }
 
     /// <summary>
@@ -99,10 +103,12 @@ public class TurretShooting : MonoBehaviour
     private void Shooting()
     {
         var _clone = Instantiate(_rocket);
-        ///  В дальнейшем, исправить направление полета ракеты.
-        _clone.transform.SetParent(_headTurret.transform);     
         _clone.transform.position = _headTurret.transform.position;
         _clone.transform.rotation = _headTurret.transform.rotation;
+
+        /// Наведение ракеты.
+        Explosion _explScript = _clone.GetComponent<Explosion>();
+        _explScript._direction = _enemy.transform.position - _clone.transform.position;
     }
     
     /// <summary>

@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class Explosion : MonoBehaviour
 {
+    #region Переменные
+
     [SerializeField] private HitPoints _hp;
+    [SerializeField] public Vector3 _direction;
     [SerializeField] private float _forceExplosion = 10.0f;
     [SerializeField] private float _rocketSpeed = 0.6f;
     [SerializeField] private float _damage = 45.0f;
@@ -12,17 +15,32 @@ public class Explosion : MonoBehaviour
     [SerializeField] private bool _fire = false;
     [SerializeField] private List<Rigidbody> objectsInCol = new List<Rigidbody>();
 
+    #endregion
+
+
+    #region Методы
+
+    /// <summary>
+    /// Метод Start.
+    /// </summary>
     private void Start()
     {
         CalculateRocketDamage();
     }
 
+    /// <summary>
+    /// Метод FixedUpdate.
+    /// </summary>
     private void FixedUpdate()
     {
         MovingRocket();
         Fire();
     }
 
+    /// <summary>
+    /// Метод столкновения.
+    /// </summary>
+    /// <param name="other"></param>
     private void OnTriggerEnter(Collider other)
     {
         var body = other.GetComponent<Rigidbody>();
@@ -34,6 +52,10 @@ public class Explosion : MonoBehaviour
         _fire = true;
     }
 
+    /// <summary>
+    /// Условие уничтожения ракеты.
+    /// </summary>
+    /// <param name="other"></param>
     private void OnTriggerExit(Collider other)
     {
         if (other.gameObject.tag == "Ground")
@@ -45,7 +67,7 @@ public class Explosion : MonoBehaviour
     /// </summary>
     private void MovingRocket()
     {
-        gameObject.transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, transform.localPosition.z + _rocketSpeed);
+        gameObject.transform.Translate(_direction.normalized * _rocketSpeed, Space.World);
     }
 
     /// <summary>
@@ -70,7 +92,6 @@ public class Explosion : MonoBehaviour
         }
     }
 
-
     /// <summary>
     /// Метод расчета урона ракеты.
     /// </summary>
@@ -78,4 +99,6 @@ public class Explosion : MonoBehaviour
     {
         _damage = Random.Range(45.0f, 100.0f);
     }
+
+    #endregion
 }
